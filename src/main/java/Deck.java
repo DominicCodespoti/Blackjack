@@ -24,12 +24,4 @@ public class Deck {
         heldCards.remove(randomNumber);
         return randomCard;
     }
-
-    public void displayDeck() {
-        for (int i = 0; i < heldCards.size(); i++) {
-            System.out.println(heldCards.get(i).Suite);
-            System.out.println(heldCards.get(i).Name);
-            System.out.println(heldCards.get(i).Value + "\n");
-        }
-    }
 }

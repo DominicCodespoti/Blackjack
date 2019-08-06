@@ -1,21 +1,6 @@
 import java.util.Scanner;
 
 public class Program {
-
-    public static boolean checkPlayerWin(Hand playerHand, Hand dealerHand) {
-        if (checkBlackjack(playerHand) || checkBust(dealerHand)) {
-            return true;
-        }
-        return false;
-    }
-
-    public static boolean checkDealerWin(Hand playerHand, Hand dealerHand) {
-        if (checkBlackjack(dealerHand) || checkBust(playerHand)) {
-            return true;
-        }
-        return false;
-    }
-
     public static boolean checkBlackjack(Hand checkHand) {
         if (checkHand.handValue == 21) {
             return true;
@@ -30,6 +15,20 @@ public class Program {
         return false;
     }
 
+    public static void aceChecker(Hand playerHand)
+    {
+        Scanner inputReader = new Scanner(System.in);
+        String userInput = "";
+        if (playerHand.heldCards.get(playerHand.heldCards.size() -1).Name.equals("ACE")){
+            System.out.println("Would you like the Ace to value at 1 or 10?: ");
+            userInput = inputReader.next();
+            if (userInput.equals("1"))
+                playerHand.heldCards.get(playerHand.heldCards.size() -1).Value = 1;
+            if (userInput.equals("1"))
+                playerHand.heldCards.get(playerHand.heldCards.size() -1).Value = 11;
+        }
+    }
+
     public static String mainGame() {
         Scanner inputReader = new Scanner(System.in);
         String userInput = "hit";
@@ -40,14 +39,20 @@ public class Program {
 
         dealerHand.addCard(tableDeck.dispenseRandomCard());
         playerHand.addCard(tableDeck.dispenseRandomCard());
+
+        aceChecker(playerHand);
+
         dealerHand.addCard(tableDeck.dispenseRandomCard());
         playerHand.addCard(tableDeck.dispenseRandomCard());
+
+        aceChecker(playerHand);
 
         while (userInput.equals("hit") && !checkBust(playerHand) && !checkBlackjack(playerHand)) {
             System.out.println("Would you like to 'hit' or 'stay': ");
             userInput = inputReader.next();
             if (userInput.equals("hit")) {
                 playerHand.addCard(tableDeck.dispenseRandomCard());
+                aceChecker(playerHand);
             }
         }
 
@@ -68,6 +73,10 @@ public class Program {
             return dealerHand.handName + " holds a hand with a value of " + dealerHand.handValue
                     + " beating the players hand of " + playerHand.handValue;
 
+        if (dealerHand.handValue == playerHand.handValue)
+            return "Both players have a hand value of " + playerHand.handValue + ", ending the game" +
+                    "in a draw!";
+
         return playerHand.handName + " holds a hand with a value of " + playerHand.handValue
                 + " beating the dealers hand of " + dealerHand.handValue;
     }
@@ -81,6 +90,8 @@ public class Program {
             userInput = inputReader.next();
             if (userInput.toLowerCase().equals("start"))
                 System.out.println(mainGame());
+            else if (userInput.toLowerCase().equals("quit"))
+                break;
         }
     }
 }
